@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أكاديمية لوس سانتوس - نموذج التقديم</title>
+    <!-- 1. ربط ملف الخطوط (لجمالية اللغة العربية) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 2. ملف التصميم CSS مدمج -->
+    <style>
+        /* الإعدادات العامة والتصميم الداكن */
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #121212; /* أسود داكن جدًا */
+            color: #f0f0f0;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* لمنع الشريط الأفقي بسبب الأنيميشن */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 25px;
+            background-color: #1e1e1e; /* رمادي داكن للخلفية */
+            border: 1px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* رأس الصفحة والشعار */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #0d6efd; /* خط أزرق شرطي */
+            padding-bottom: 20px;
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+            margin-bottom: 15px;
+            border-radius: 50%;
+            border: 3px solid #f0f0f0;
+            object-fit: cover; 
+        }
+
+        header h1 {
+            color: #ffffff;
+            margin: 10px 0 5px 0;
+        }
+
+        .application-id {
+            font-size: 0.9rem;
+            color: #888;
+            margin: 0;
+        }
+
+        /* تصميم حقول النموذج */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            background-color: #2b2b2b; 
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: #f0f0f0;
+            font-family: 'Cairo', sans-serif;
+            box-sizing: border-box; 
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #0d6efd; 
+            box-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
+        }
+        
+        /* 🚨 جديد: تصميم حقول الإدخال الخاطئة (Validation) 🚨 */
+        .form-group input.invalid,
+        .form-group textarea.invalid {
+            border-color: #e74c3c; /* أحمر */
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+        }
+
+        /* 🚨 جديد: تصميم رسالة الخطأ 🚨 */
+        .error-message {
+            color: #e74c3c; /* أحمر */
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none; /* مخفي افتراضيًا */
+        }
+
+        /* تصميم زر الإرسال */
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: linear-gradient(90deg, #0d6efd, #0a58ca);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"]:hover:not(:disabled) {
+            background: linear-gradient(90deg, #0a58ca, #0d6efd);
+            box-shadow: 0 0 15px rgba(13, 110, 253, 0.5);
+        }
+        
+        button[type="submit"]:disabled {
+            background: #555;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        /* رسالة النجاح (مخفية) */
+        .hidden {
+            display: none;
+        }
+
+        #success-message {
+            text-align: center;
+            padding: 30px;
+            background-color: #1a3a1a;
+            border: 1px solid #3c763d;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        /* كود مربع التعهد */
+        .form-group.pledge {
+            display: flex;
+            align-items: center;
+            background-color: #2b2b2b;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #444;
+        }
+        
+        .form-group.pledge input[type="checkbox"] {
+            width: auto;
+            margin-left: 15px;
+            transform: scale(1.3);
+        }
+        
+        .form-group.pledge label {
+            margin-bottom: 0;
+            font-weight: normal;
+        }
+
+
+        /* الأنيميشن: أضواء الشرطة النابضة */
+        .pulse-light {
+            position: fixed;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.1; 
+        }
+
+        .pulse-light.left {
+            left: 0;
+            background: radial-gradient(circle at 0% 0%, rgba(255, 0, 0, 0.4), transparent 70%);
+            animation: pulseRed 5s infinite ease-in-out;
+        }
+
+        .pulse-light.right {
+            right: 0;
+            background: radial-gradient(circle at 100% 0%, rgba(0, 100, 255, 0.4), transparent 70%);
+            animation: pulseBlue 5s infinite ease-in-out;
+        }
+
+        @keyframes pulseRed {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.25; }
+        }
+
+        @keyframes pulseBlue {
+            0%, 100% { opacity: 0.25; }
+            50% { opacity: 0.1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- هذا هو الضوء النابض (أحمر وأزرق) -->
+    <div class="pulse-light left"></div>
+    <div class="pulse-light right"></div>
+
+    <div class="container">
+        <!-- رأس الصفحة مع الشعار -->
+        <header>
+            <!-- 🚨 تعديل: ضع رابط شعار الأكاديمية الخاص بك هنا 🚨 -->
+            <img src="YOUR_LOGO_URL_HERE.png" alt="شعار أكاديمية لوس سانتوس" class="logo" 
+                 onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';">
+            <!-- شعار احتياطي في حال فشل تحميل الصورة -->
+            <svg id="logo-fallback" class="logo" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+                <path d="M12 2L3.5 6v7.38c0 4.64 3.73 8.8 8.5 9.62 4.77-.82 8.5-5 8.5-9.62V6L12 2zm0 17.9c-3.47-.7-6.5-4-6.5-7.9V7.5L12 4.5v15.4zM12 6.5l4 2v4.28c0 1.8-.93 3.4-2.3 4.2l-1.7-1.7V11h-2v2.5l-1.7 1.7c-1.37-.8-2.3-2.4-2.3-4.2V8.5l4-2z"/>
+            </svg>
+            
+            <h1>🏛️ أكاديمية لوس سانتوس - نموذج التقديم</h1>
+            <p class="application-id">رقم الطلب: <span id="app-id-code">...</span></p>
+        </header>
+
+        <!-- رسالة النجاح (مخفية افتراضيًا) -->
+        <div id="success-message" class="hidden">
+            <h2>✅ تم إرسال طلبك بنجاح</h2>
+            <p>شكرًا لتقديمك. سيتم مراجعة طلبك من قبل الإدارة العليا والتواصل معك عبر الديسكورد قريبًا.</p>
+        </div>
+
+        <!-- 🚨 تعديل: تم إضافة "novalidate" لإيقاف التحقق الافتراضي للمتصفح والاعتماد على الجافاسكريبت -->
+        <form id="recruitment-form" novalidate>
+            
+            <div class="form-group">
+                <label for="discord-name">Discord (مثال: Ammar) *</label>
+                <input type="text" id="discord-name" name="discord-name" placeholder="Ammar" required minlength="4">
+                <div class="error-message">يجب أن يكون 4 حروف على الأقل.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="discord-id">Discord ID (مثال: 881117851598065704) *</label>
+                <input type="text" id="discord-id" name="discord-id" placeholder="881117851598065704" required pattern="\d{17,20}">
+                <div class="error-message">يجب أن يكون ID الديسكورد رقماً صحيحاً (17-20 رقم).</div>
+            </div>
+
+            <div class="form-group">
+                <label for="character-name">Character Name *</label>
+                <input type="text" id="character-name" name="character-name" required pattern="^[a-zA-Z]{2,}\s[a-zA-Z]{2,}.*$">
+                <div class="error-message">يجب أن يكون اسماً باللغة الإنجليزية (اسم أول واسم أخير، مثل: John Doe).</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="age">Your Age in Reality *</label>
+                <input type="number" id="age" name="age" min="16" placeholder="16+" required>
+                <div class="error-message">يجب أن يكون العمر 16 سنة أو أكثر.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="contribution">ماذا ستقدم للوزارة كضابط و عضو مهم و فعال ؟ *</label>
+                <textarea id="contribution" name="contribution" rows="5" required minlength="30"></textarea>
+                <div class="error-message">الإجابة قصيرة جداً، نحتاج 30 حرفاً على الأقل.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="experience">هل لديك خبرة عسكرية ؟ اذا نعم أذكرها *</label>
+                <textarea id="experience" name="experience" rows="5" placeholder="اذكر السيرفر، الرتبة، القسم..." required minlength="30"></textarea>
+                <div class="error-message">الإجابة قصيرة جداً، نحتاج 30 حرفاً على الأقل.</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="insult-scenario">لو أتى لك أحد الضباط أو رتبته أعلى منك و قام بإهانتك ماهو التصرف الصحيح ؟ *</label>
+                <textarea id="insult-scenario" name="insult-scenario" rows="5" required minlength="30"></textarea>
+                <div class="error-message">الإجابة قصيرة جداً، نحتاج 30 حرفاً على الأقل.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="what-distinguishes-you">وش الشيء الي يميزك عن غيرك من المتقدمين ؟ *</label>
+                <textarea id="what-distinguishes-you" name="what-distinguishes-you" rows="5" required minlength="30"></textarea>
+                <div class="error-message">الإجابة قصيرة جداً، نحتاج 30 حرفاً على الأقل.</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="dispatch-utility">ماهي فائدة الدسباتش ؟ *</label>
+                <textarea id="dispatch-utility" name="dispatch-utility" rows="4" required minlength="20"></textarea>
+                <div class="error-message">الإجابة قصيرة جداً، نحتاج 20 حرفاً على الأقل.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="protocols">حسب معرفتك اذكر اهم ثلاث بروتوكلات عسكرية *</label>
+                <textarea id="protocols" name="protocols" rows="4" required minlength="20"></textarea>
+                <div class="error-message">الإجابة قصيرة جداً، نحتاج 20 حرفاً على الأقل.</div>
+            </div>
+            
+            <!-- مربع التعهد الجديد -->
+            <div class="form-group pledge">
+                <input type="checkbox" id="pledge" name="pledge" required>
+                <label for="pledge">أتعهد بالالتزام بالقوانين، وأداء مهامي بكل أمانة</label>
+            </div>
+
+            <!-- زر الإرسال (سيكون معطل افتراضيًا) -->
+            <button type="submit" id="submit-button" disabled>إرسال الطلب</button>
+        </form>
+    </div>
+
+    <!-- 3. ملف الجافاسكريبت (لإرسال البيانات) مدمج -->
+    <script>
+        // 🚨🚨🚨 هام جدًا: الصق رابط الـ Webhook الخاص بك هنا 🚨🚨🚨
+        // (احصل عليه من: Discord -> Edit Channel -> Integrations -> Webhooks -> New Webhook)
+        const WEBHOOK_URL = "YOUR_WEBHOOK_URL_HERE"; 
+        // 🚨🚨🚨 (استبدل هذا الرابط بالرابط الحقيقي من ديسكورد) 🚨🚨🚨
+
+
+        const form = document.getElementById('recruitment-form');
+        const successMessage = document.getElementById('success-message');
+        const pledgeCheckbox = document.getElementById('pledge');
+        const submitButton = document.getElementById('submit-button');
+
+        // --- 1. كود تفعيل/تعطيل زر الإرسال بناءً على التعهد ---
+        pledgeCheckbox.addEventListener('change', () => {
+            submitButton.disabled = !pledgeCheckbox.checked;
+        });
+        
+        // --- 2. كود إنشاء رقم طلب عشوائي ---
+        document.addEventListener('DOMContentLoaded', () => {
+            function generateId() {
+                return Math.random().toString(36).substring(2, 9).toUpperCase();
+            }
+            document.getElementById('app-id-code').textContent = generateId();
+        });
+
+
+        // 🚨 --- 3. نظام التحقق من الصحة (Validation) الجديد --- 🚨
+        
+        // وظيفة لإظهار الخطأ
+        function showError(input, message) {
+            const formGroup = input.parentElement;
+            const errorElement = formGroup.querySelector('.error-message');
+            
+            input.classList.add('invalid');
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+        }
+
+        // وظيفة لإخفاء الأخطاء
+        function clearErrors() {
+            document.querySelectorAll('.form-group input, .form-group textarea').forEach(input => {
+                input.classList.remove('invalid');
+                const formGroup = input.parentElement;
+                const errorElement = formGroup.querySelector('.error-message');
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+            });
+        }
+
+        // وظيفة التحقق الرئيسية
+        function validateForm() {
+            clearErrors();
+            let isValid = true;
+
+            const inputs = form.querySelectorAll('input[required], textarea[required]');
+
+            inputs.forEach(input => {
+                let value = input.value.trim();
+
+                // 1. التحقق من الحقل الفارغ
+                if (value === '') {
+                    isValid = false;
+                    showError(input, 'هذا الحقل مطلوب.');
+                    return; // انتقل للحقل التالي
+                }
+
+                // 2. التحقق من أقل عدد حروف (minlength)
+                if (input.minLength > 0 && value.length < input.minLength) {
+                    isValid = false;
+                    showError(input, `الإجابة قصيرة جداً، نحتاج ${input.minLength} حرفاً على الأقل.`);
+                    return;
+                }
+
+                // 3. التحقق من النمط (pattern)
+                if (input.pattern) {
+                    const regex = new RegExp(input.pattern);
+                    if (!regex.test(value)) {
+                        isValid = false;
+                        // استخدام رسالة الخطأ الافتراضية من العنصر
+                        const customError = input.parentElement.querySelector('.error-message').textContent;
+                        showError(input, customError || 'البيانات المدخلة غير صحيحة.');
+                        return;
+                    }
+                }
+                
+                // 4. التحقق من أقل قيمة (min) للعمر
+                if (input.type === 'number' && input.min) {
+                    if (parseInt(value) < parseInt(input.min)) {
+                        isValid = false;
+                        showError(input, `يجب أن يكون العمر ${input.min} سنة أو أكثر.`);
+                        return;
+                    }
+                }
+            });
+
+            return isValid;
+        }
+
+
+        // --- 4. كود إرسال النموذج عند الضغط (معدل) ---
+        form.addEventListener('submit', async (event) => {
+            // منع الإرسال التلقائي للصفحة
+            event.preventDefault();
+
+            // 🚨 خطوة جديدة: التحقق من الصحة أولاً
+            if (!validateForm()) {
+                alert('يوجد أخطاء في النموذج. يرجى مراجعة الحقول المحددة باللون الأحمر.');
+                return; // أوقف الإرسال
+            }
+            
+            // التحقق من أن الرابط ليس الرابط الافتراضي
+            if (WEBHOOK_URL === "YOUR_WEBHOOK_URL_HERE") {
+                alert("خطأ: لم يتم تكوين رابط الـ Webhook. يرجى مراجعة مطور الموقع.");
+                return;
+            }
+
+            // تغيير زر الإرسال لإظهار "جاري الإرسال"
+            submitButton.disabled = true;
+            submitButton.textContent = '... جاري إرسال الطلب ...';
+
+            // تجميع بيانات النموذج
+            const formData = new FormData(form);
+            
+            // تحضير الرسالة بتنسيق Embed احترافي لديسكورد (مع الحقول الجديدة)
+            const discordPayload = {
+                username: "نظام التقديم (الأكاديمية)",
+                // avatar_url: "https://your-logo-url.png", 
+                embeds: [
+                    {
+                        title: "🚨 طلب تقديم جديد للأكاديمية 🚨",
+                        color: 1752220, // (لون أزرق)
+                        timestamp: new Date().toISOString(),
+                        fields: [
+                            // القسم الأول
+                            { name: "--- معلومات OOC / IC ---", value: "" },
+                            { name: "👤 اسم الديسكورد", value: formData.get('discord-name'), inline: true },
+                            { name: "🆔 آي دي الديسكورد", value: formData.get('discord-id'), inline: true },
+                            { name: "🧑‍✈️ اسم الشخصية", value: formData.get('character-name'), inline: true },
+                            { name: "🎂 العمر الحقيقي", value: formData.get('age'), inline: true },
+                            
+                            // القسم الثاني - الأسئلة
+                            { name: "--- الأسئلة ---", value: "" },
+                            { name: "💡 ماذا ستقدم للوزارة؟", value: formData.get('contribution') },
+                            { name: "💼 الخبرة العسكرية؟", value: formData.get('experience') },
+                            { name: "👮 سيناريو (الإهانة)", value: formData.get('insult-scenario') },
+                            { name: "✨ ما الذي يميزك؟", value: formData.get('what-distinguishes-you') },
+                            { name: "📞 فائدة الدسباتش؟", value: formData.get('dispatch-utility') },
+                            { name: "📜 أهم 3 بروتوكلات؟", value: formData.get('protocols') }
+                        ],
+                        footer: {
+                            text: `تم الإرسال بواسطة نظام التقديم الآلي | ID: ${formData.get('discord-id')}`
+                        }
+                    }
+                ]
+            };
+
+            // إرسال البيانات إلى الـ Webhook
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(discordPayload),
+                });
+
+                if (response.ok) {
+                    // إذا نجح الإرسال: إخفاء النموذج وإظهار رسالة النجاح
+                    form.classList.add('hidden');
+                    successMessage.classList.remove('hidden');
+                } else {
+                    // إذا فشل الإرسال (خطأ في الرابط؟)
+                    alert(`حدث خطأ أثناء إرسال طلبك. (Error: ${response.status})`);
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'إرسال الطلب';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('حدث خطأ فادح. يرجى مراجعة المطور.');
+                submitButton.disabled = false;
+                submitButton.textContent = 'إرسال الطلب';
+            }
+        });
+    </script>
+</body>
+</html>
